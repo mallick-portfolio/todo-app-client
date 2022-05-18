@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-
+import axios from "axios";
+import {  toast } from 'react-toastify';
 const AddTask = () => {
   const [task, setTask] = useState({
     name: "",
@@ -10,13 +11,13 @@ const AddTask = () => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(task);
-    setTask({
-      name: "",
-      description: "",
+    await axios.post("http://localhost:5000/tasks", task).then((response) => {
+      toast.success('Task Added Successfully')
+      setTask({ name: "", description: "" });
     });
+
   };
 
   return (
@@ -27,7 +28,7 @@ const AddTask = () => {
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Task Name</Form.Label>
               <Form.Control
-              value={task.name}
+                value={task.name}
                 name="name"
                 onChange={handleChange}
                 type="text"
@@ -38,7 +39,7 @@ const AddTask = () => {
             <Form.Group className="mb-3">
               <Form.Label>Task Description</Form.Label>
               <Form.Control
-              value={task.description}
+                value={task.description}
                 name="description"
                 onChange={handleChange}
                 as="textarea"
