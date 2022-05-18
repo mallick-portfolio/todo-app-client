@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 
 const AllTask = () => {
   const [tasks, setTasks] = useState([]);
-  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
     const loadTask = async () => {
@@ -29,9 +28,8 @@ const AllTask = () => {
     const complete = {
       name: task.name,
       description: task.description,
-      complete: true,
+      complete: !task.complete,
     };
-    console.log(complete);
     await axios
       .put(`http://localhost:5000/tasks/${id}`, complete)
       .then(async (res) => {
