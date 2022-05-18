@@ -8,7 +8,7 @@ const AllTask = () => {
 
   useEffect(() => {
     const loadTask = async () => {
-      const res = await axios.get("http://localhost:5000/tasks");
+      const res = await axios.get("https://sheltered-mesa-20704.herokuapp.com/tasks");
       setTasks(res.data);
     };
     loadTask();
@@ -16,7 +16,7 @@ const AllTask = () => {
   const handleDelete = async (id) => {
     const agree = window.confirm();
     if (agree) {
-      await axios.delete(`http://localhost:5000/tasks/${id}`).then((res) => {
+      await axios.delete(`https://sheltered-mesa-20704.herokuapp.com/tasks/${id}`).then((res) => {
         const remaining = tasks.filter((task) => task._id !== id);
         setTasks(remaining);
         toast("deleted successfully");
@@ -31,9 +31,9 @@ const AllTask = () => {
       complete: !task.complete,
     };
     await axios
-      .put(`http://localhost:5000/tasks/${id}`, complete)
+      .put(`https://sheltered-mesa-20704.herokuapp.com/tasks/${id}`, complete)
       .then(async (res) => {
-        const result = await axios.get("http://localhost:5000/tasks");
+        const result = await axios.get("https://sheltered-mesa-20704.herokuapp.com/tasks");
         setTasks(result.data);
       });
   };

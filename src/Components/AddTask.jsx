@@ -15,7 +15,7 @@ const AddTask = () => {
   const handleSubmit = async (e) => {
     console.log(task)
     e.preventDefault();
-    await axios.post("http://localhost:5000/tasks", task).then((response) => {
+    await axios.post("https://sheltered-mesa-20704.herokuapp.com/tasks", task).then((response) => {
       
       toast.success("Task Added Successfully");
       navigate("/");
