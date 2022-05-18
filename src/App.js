@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import { Route, Routes } from "react-router-dom";
 import AllTask from "./Components/AllTask.jsx";
 import Register from "./Components/Register.jsx";
+import Login from "./Components/Login.jsx";
+import RequireAuth from "./Components/RequireAuth.jsx";
 
 function App() {
   return (
@@ -13,8 +15,16 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<AllTask />} />
-        <Route path="/add-task" element={<AddTask />} />
+        <Route
+          path="/add-task"
+          element={
+            <RequireAuth>
+              <AddTask />
+            </RequireAuth>
+          }
+        />
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <ToastContainer />
     </div>

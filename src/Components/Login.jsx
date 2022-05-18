@@ -1,23 +1,23 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import {
-  useCreateUserWithEmailAndPassword,
-  useUpdateProfile,
-} from "react-firebase-hooks/auth";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import auth from "../firebase.init.js";
-import { Link } from "react-router-dom";
-const Register = () => {
-  const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(auth);
-  const [updateProfile] = useUpdateProfile(auth);
+import { useLocation, useNavigate } from "react-router-dom";
+const Login = () => {
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
+
+  let navigate = useNavigate();
+  let location = useLocation();
+  let from = location.state?.from?.pathname || "/";
 
   if (error) {
     toast.warning("SignUp Failed. Please Try Again");
@@ -26,37 +26,17 @@ const Register = () => {
     return <p>Loading...</p>;
   }
   if (user) {
-    return (
-      <div>
-        <p>Registered User: {user.email}</p>
-      </div>
-    );
+    navigate(from, { replace: true });
   }
 
   const onSubmit = async (data, e) => {
-    await createUserWithEmailAndPassword(data.email, data.password);
-    await updateProfile({ displayName: data.name });
+    await signInWithEmailAndPassword(data.email, data.password);
   };
   return (
     <Container className="my-4">
       <Row className="justify-content-center">
         <Col md={6}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-outline mb-1">
-              <input
-                {...register("name", {
-                  required: "Please enter your Name",
-                  value: "",
-                })}
-                type="text"
-                placeholder="Name"
-                className="form-control"
-              />
-              <p className="text-danger">
-                {errors.name?.type === "required" && "* Name is required"}
-              </p>
-            </div>
-
             <div className="form-outline mb-1">
               <input
                 {...register("email", {
@@ -97,34 +77,10 @@ const Register = () => {
                 <p className="text-danger">{errors.password?.message}</p>
               )}
             </div>
-            <div className="form-outline mb-1">
-              <input
-                {...register("confirm_password", {
-                  required: true,
-                  validate: (val) => {
-                    if (watch("password") !== val) {
-                      return "Your passwords do no match";
-                    }
-                  },
-                })}
-                placeholder="Confirm password"
-                type="password"
-                className="form-control"
-              />
-              {errors.confirm_password && (
-                <p className="text-danger">{errors.confirm_password.message}</p>
-              )}
-            </div>
 
             <button type="submit" className="btn btn-primary btn-block mb-4">
-              Sign Up
+              Sign in
             </button>
-
-            <div className="text-center">
-              <p>
-                Already have an account <Link to="/login">Login</Link>
-              </p>
-            </div>
           </form>
         </Col>
       </Row>
@@ -132,4 +88,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

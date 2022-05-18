@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import axios from "axios";
-import {  toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import {useNavigate} from "react-router-dom";
 const AddTask = () => {
   const [task, setTask] = useState({
     name: "",
@@ -10,14 +11,13 @@ const AddTask = () => {
   const handleChange = (e) => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     await axios.post("http://localhost:5000/tasks", task).then((response) => {
-      toast.success('Task Added Successfully')
-      setTask({ name: "", description: "" });
+      toast.success("Task Added Successfully");
+      navigate("/");
     });
-
   };
 
   return (
