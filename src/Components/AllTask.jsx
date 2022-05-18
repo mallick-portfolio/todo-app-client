@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
-import auth from "../firebase.init.js";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
 
 const AllTask = () => {
   const [tasks, setTasks] = useState([]);
-  const [user] = useAuthState(auth);
+  const [completed, setCompleted] = useState(false);
+
   useEffect(() => {
     const loadTask = async () => {
       const res = await axios.get("http://localhost:5000/tasks");
@@ -16,21 +14,30 @@ const AllTask = () => {
     };
     loadTask();
   }, []);
-  const navigate = useNavigate();
   const handleDelete = async (id) => {
-    if (!user) {
-      toast("please login first to delete task");
-      navigate("/login");
-      return;
-    }
     const agree = window.confirm();
-    if (user && agree) {
+    if (agree) {
       await axios.delete(`http://localhost:5000/tasks/${id}`).then((res) => {
         const remaining = tasks.filter((task) => task._id !== id);
         setTasks(remaining);
         toast("deleted successfully");
       });
     }
+  };
+
+  const handleComplete = async (id, task) => {
+    const complete = {
+      name: task.name,
+      description: task.description,
+      complete: true,
+    };
+    console.log(complete);
+    await axios
+      .put(`http://localhost:5000/tasks/${id}`, complete)
+      .then(async (res) => {
+        const result = await axios.get("http://localhost:5000/tasks");
+        setTasks(result.data);
+      });
   };
 
   return (
@@ -50,10 +57,28 @@ const AllTask = () => {
               {tasks.map((task, i) => (
                 <tr key={task._id}>
                   <td>{i + 1}</td>
-                  <td>{task.name}</td>
-                  <td>{task.description}</td>
+                  <td>
+                    {!task.complete ? (
+                      <span>{task.name}</span>
+                    ) : (
+                      <del>{task.name}</del>
+                    )}
+                  </td>
+                  <td>
+                    {!task.complete ? (
+                      <span>{task.description}</span>
+                    ) : (
+                      <del>{task.description}</del>
+                    )}
+                  </td>
                   <td className="d-flex">
-                    <Button className="mx-1">complete</Button>
+                    <Button
+                      variant={`${task.complete ? "info" : "success"}`}
+                      onClick={() => handleComplete(task._id, task)}
+                      className="me-3"
+                    >
+                      {task.complete ? "completed" : "complete"}
+                    </Button>
                     <Button
                       onClick={() => handleDelete(task._id)}
                       variant="warning"

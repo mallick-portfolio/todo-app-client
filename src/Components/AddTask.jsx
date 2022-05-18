@@ -9,12 +9,14 @@ const AddTask = () => {
     description: "",
   });
   const handleChange = (e) => {
-    setTask({ ...task, [e.target.name]: e.target.value });
+    setTask({ ...task, complete: false, [e.target.name]: e.target.value });
   };
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
+    console.log(task)
     e.preventDefault();
     await axios.post("http://localhost:5000/tasks", task).then((response) => {
+      
       toast.success("Task Added Successfully");
       navigate("/");
     });

@@ -14,7 +14,14 @@ function App() {
     <div>
       <Header />
       <Routes>
-        <Route path="/" element={<AllTask />} />
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+             <AllTask />
+            </RequireAuth>
+          }
+        />
         <Route
           path="/add-task"
           element={

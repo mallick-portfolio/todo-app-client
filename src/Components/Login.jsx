@@ -4,7 +4,7 @@ import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import auth from "../firebase.init.js";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const Login = () => {
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
@@ -81,6 +81,11 @@ const Login = () => {
             <button type="submit" className="btn btn-primary btn-block mb-4">
               Sign in
             </button>
+            <div className="text-center">
+              <p>
+                Create an Account <Link to="/register">Register</Link>
+              </p>
+            </div>
           </form>
         </Col>
       </Row>
