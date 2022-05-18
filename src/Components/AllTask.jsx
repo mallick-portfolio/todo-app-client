@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import axios from "axios";
-import Loading from "./Loading.jsx";
 const AllTask = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
     const loadTask = async () => {
       const res = await axios.get("http://localhost:5000/tasks");
       setTasks(res.data);
-      setIsLoading(false);
     };
     loadTask();
   }, []);
@@ -33,7 +30,7 @@ const AllTask = () => {
                   <td>{task.name}</td>
                   <td>{task.description}</td>
                   <td className="d-flex">
-                    <Button  className="mx-1">complete</Button>
+                    <Button className="mx-1">complete</Button>
                     <Button variant="warning">Delete</Button>
                   </td>
                 </tr>

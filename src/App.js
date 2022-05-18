@@ -5,6 +5,7 @@ import AddTask from "./Components/AddTask.jsx";
 import { ToastContainer } from "react-toastify";
 import { Route, Routes } from "react-router-dom";
 import AllTask from "./Components/AllTask.jsx";
+import Register from "./Components/Register.jsx";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<AllTask />} />
         <Route path="/add-task" element={<AddTask />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
       <ToastContainer />
     </div>
